@@ -66,8 +66,10 @@ ASOIU_sem2/
 
 Запуск:
 
+``` bash
 cd Seminar2
 dotnet run
+```
 ---
 
 ## 🔹 Версия 2 — Seminar2_ver2
