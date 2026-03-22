@@ -1,0 +1,14 @@
+/Users/korneev/Yandex.Disk.localized/Файлы/code/ASOIU_sem2/Seminar2/bin/Debug/net10.0/Seminar2
+/Users/korneev/Yandex.Disk.localized/Файлы/code/ASOIU_sem2/Seminar2/bin/Debug/net10.0/Seminar2.deps.json
+/Users/korneev/Yandex.Disk.localized/Файлы/code/ASOIU_sem2/Seminar2/bin/Debug/net10.0/Seminar2.runtimeconfig.json
+/Users/korneev/Yandex.Disk.localized/Файлы/code/ASOIU_sem2/Seminar2/bin/Debug/net10.0/Seminar2.dll
+/Users/korneev/Yandex.Disk.localized/Файлы/code/ASOIU_sem2/Seminar2/bin/Debug/net10.0/Seminar2.pdb
+/Users/korneev/Yandex.Disk.localized/Файлы/code/ASOIU_sem2/Seminar2/obj/Debug/net10.0/Seminar2.GeneratedMSBuildEditorConfig.editorconfig
+/Users/korneev/Yandex.Disk.localized/Файлы/code/ASOIU_sem2/Seminar2/obj/Debug/net10.0/Seminar2.AssemblyInfoInputs.cache
+/Users/korneev/Yandex.Disk.localized/Файлы/code/ASOIU_sem2/Seminar2/obj/Debug/net10.0/Seminar2.AssemblyInfo.cs
+/Users/korneev/Yandex.Disk.localized/Файлы/code/ASOIU_sem2/Seminar2/obj/Debug/net10.0/Seminar2.csproj.CoreCompileInputs.cache
+/Users/korneev/Yandex.Disk.localized/Файлы/code/ASOIU_sem2/Seminar2/obj/Debug/net10.0/Seminar2.dll
+/Users/korneev/Yandex.Disk.localized/Файлы/code/ASOIU_sem2/Seminar2/obj/Debug/net10.0/refint/Seminar2.dll
+/Users/korneev/Yandex.Disk.localized/Файлы/code/ASOIU_sem2/Seminar2/obj/Debug/net10.0/Seminar2.pdb
+/Users/korneev/Yandex.Disk.localized/Файлы/code/ASOIU_sem2/Seminar2/obj/Debug/net10.0/Seminar2.genruntimeconfig.cache
+/Users/korneev/Yandex.Disk.localized/Файлы/code/ASOIU_sem2/Seminar2/obj/Debug/net10.0/ref/Seminar2.dll
