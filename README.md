@@ -103,4 +103,5 @@ dotnet run
 
 # 👨‍💻 Автор
 [Григорий Корнеев ИУ5-24Б](https://github.com/gregkorneev-BMSTU)
+
 [Репозиторий курса АСОИУ](https://github.com/gregkorneev-BMSTU/ASOIU)
