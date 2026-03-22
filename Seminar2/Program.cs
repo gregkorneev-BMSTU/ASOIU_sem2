@@ -19,6 +19,22 @@ int[,] matrixLIL = {
     { 0, 0, 0, 6, 0, 0 }
 };
 
+// ============================================================
+// ТЕСТОВАЯ МАТРИЦА ДЛЯ CSR
+// ============================================================
+
+// Тестовая матрица для CSR (7 строк × 5 столбцов)
+// Используется пример по рисунку 3
+int[,] matrixCSR = {
+    { 8, 0, 2, 0, 0 },
+    { 0, 0, 5, 0, 0 },
+    { 0, 0, 0, 0, 0 },
+    { 0, 0, 0, 0, 0 },
+    { 0, 0, 7, 1, 2 },
+    { 0, 0, 0, 0, 0 },
+    { 0, 0, 0, 9, 0 }
+};
+
 // ЗАДАНИЕ 1: COO
 PrintSeparator("ЗАДАНИЕ 1: COO - КООРДИНАТНЫЙ ФОРМАТ ХРАНЕНИЯ");
 
@@ -82,6 +98,58 @@ int[,] restoredLIL = LILToDense(rowsLIL, dataLIL, rLIL, cLIL);
 PrintMatrix(restoredLIL);
 
 Console.WriteLine($"\nМатрица восстановлена верно: {MatricesEqual(matrixLIL, restoredLIL)}");
+
+// ============================================================
+// ЗАДАНИЕ 3: CSR
+// ============================================================
+
+PrintSeparator("ЗАДАНИЕ 3: CSR - СЖАТОЕ ХРАНЕНИЕ ПО СТРОКАМ");
+
+int rCSR = matrixCSR.GetLength(0);
+int cCSR = matrixCSR.GetLength(1);
+int nCSR = CountNonZero(matrixCSR);
+
+Console.WriteLine("Исходная плотная матрица (Рисунок 3, 7x5):");
+PrintMatrix(matrixCSR);
+
+Console.WriteLine("\n--- Анализ эффективности CSR ---");
+Console.WriteLine($"Размерность матрицы: {rCSR} x {cCSR} = {rCSR * cCSR} ячеек (плотное хранение)");
+Console.WriteLine($"Ненулевых элементов (N): {nCSR}");
+Console.WriteLine($"CSR хранение (2N + R + 1): 2*{nCSR} + {rCSR} + 1 = {2 * nCSR + rCSR + 1} ячеек");
+Console.WriteLine($"Условие (2N+R+1 < R*C): {2 * nCSR + rCSR + 1} < {rCSR * cCSR} => isCSREffective = {isCSREffective(matrixCSR)}");
+
+Console.WriteLine("\n--- Преобразование Dense -> CSR ---");
+DenseToCSR(matrixCSR, out int[] dataCSR, out int[] indicesCSR, out int[] ipCSR);
+PrintArray("Data", dataCSR);
+PrintArray("Indices", indicesCSR);
+PrintArray("IndexPointers", ipCSR);
+
+Console.WriteLine("\n--- Пошаговое декодирование строк из CSR ---");
+for (int i = 0; i < rCSR; i++)
+{
+    int start = ipCSR[i];
+    int end = ipCSR[i + 1];
+
+    Console.Write($" Row {i}: IP[{i}]={start}, IP[{i + 1}]={end} => ");
+
+    if (start == end)
+    {
+        Console.WriteLine("(пустая строка)");
+    }
+    else
+    {
+        for (int k = start; k < end; k++)
+            Console.Write($"matrix[{i},{indicesCSR[k]}]={dataCSR[k]} ");
+        Console.WriteLine();
+    }
+}
+
+Console.WriteLine("\n--- Преобразование CSR -> Dense ---");
+int[,] restoredCSR = CSRToDense(dataCSR, indicesCSR, ipCSR, rCSR, cCSR);
+PrintMatrix(restoredCSR);
+
+Console.WriteLine($"\nМатрица восстановлена верно: {MatricesEqual(matrixCSR, restoredCSR)}");
+Console.WriteLine("\n=== ПРОГРАММА ЗАВЕРШЕНА ===");
 
 
 // ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ
@@ -251,4 +319,61 @@ static bool isLILEffective(int[,] dense)
     int n = CountNonZero(dense);
 
     return n * 2 < r * c;
+}
+
+// ============================================================
+// СТАТИЧЕСКИЕ ФУНКЦИИ — CSR
+// ============================================================
+
+static void DenseToCSR(int[,] dense, out int[] data, out int[] indices, out int[] indexPointers)
+{
+    int numRows = dense.GetLength(0);
+    int numCols = dense.GetLength(1);
+    int n = CountNonZero(dense);
+
+    data = new int[n];
+    indices = new int[n];
+    indexPointers = new int[numRows + 1];
+
+    int idx = 0;
+
+    for (int i = 0; i < numRows; i++)
+    {
+        indexPointers[i] = idx;
+
+        for (int j = 0; j < numCols; j++)
+            if (dense[i, j] != 0)
+            {
+                data[idx] = dense[i, j];
+                indices[idx] = j;
+                idx++;
+            }
+    }
+
+    indexPointers[numRows] = n;
+}
+
+static int[,] CSRToDense(int[] data, int[] indices, int[] indexPointers, int numRows, int numCols)
+{
+    int[,] dense = new int[numRows, numCols];
+
+    for (int i = 0; i < numRows; i++)
+    {
+        int start = indexPointers[i];
+        int end = indexPointers[i + 1];
+
+        for (int k = start; k < end; k++)
+            dense[i, indices[k]] = data[k];
+    }
+
+    return dense;
+}
+
+static bool isCSREffective(int[,] dense)
+{
+    int r = dense.GetLength(0);
+    int c = dense.GetLength(1);
+    int n = CountNonZero(dense);
+
+    return 2 * n + r + 1 < r * c;
 }
