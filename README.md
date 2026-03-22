@@ -75,8 +75,10 @@ dotnet run
 ## 🔹 Версия 2 — Seminar2_ver2
 
 Запуск:
+``` bash
 cd Seminar2_ver2
 dotnet run
+```
 ---
 
 ## 📊 Что делает программа
