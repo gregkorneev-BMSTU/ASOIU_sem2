@@ -12,3 +12,4 @@
 /Users/korneev/Yandex.Disk.localized/Файлы/code/ASOIU_sem2/Seminar2/obj/Debug/net10.0/Seminar2.pdb
 /Users/korneev/Yandex.Disk.localized/Файлы/code/ASOIU_sem2/Seminar2/obj/Debug/net10.0/Seminar2.genruntimeconfig.cache
 /Users/korneev/Yandex.Disk.localized/Файлы/code/ASOIU_sem2/Seminar2/obj/Debug/net10.0/ref/Seminar2.dll
+/Users/korneev/Yandex.Disk.localized/Файлы/code/ASOIU_sem2/Seminar2/obj/Debug/net10.0/Seminar2.sourcelink.json
