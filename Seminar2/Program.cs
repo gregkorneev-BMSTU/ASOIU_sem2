@@ -1,7 +1,4 @@
-﻿// ============================================================
-// ТЕСТОВАЯ МАТРИЦА ДЛЯ COO
-// ============================================================
-
+﻿// ТЕСТОВАЯ МАТРИЦА ДЛЯ COO
 // Тестовая матрица для COO (5 строк × 6 столбцов)
 // Всего элементов: 5×6 = 30, ненулевых: 6
 // Порог COO: 30/3 = 10 -> COO эффективен (6 < 10)
@@ -12,11 +9,17 @@ int[,] matrixCOO = {
     { 0, 0, 0, 0, 0, 4 },
     { 0, 0, 5, 0, 0, 0 }
 };
+// Тестовая матрица для LIL (4 строки × 6 столбцов)
+// Всего элементов: 4×6 = 24, ненулевых: 6
+// Порог LIL: 24/2 = 12 → LIL эффективен (6 < 12)
+int[,] matrixLIL = {
+    { 0, 1, 0, 2, 0, 0 },
+    { 0, 0, 0, 0, 0, 3 },
+    { 4, 0, 5, 0, 0, 0 },
+    { 0, 0, 0, 6, 0, 0 }
+};
 
-// ============================================================
 // ЗАДАНИЕ 1: COO
-// ============================================================
-
 PrintSeparator("ЗАДАНИЕ 1: COO - КООРДИНАТНЫЙ ФОРМАТ ХРАНЕНИЯ");
 
 int rCOO = matrixCOO.GetLength(0);
@@ -46,8 +49,42 @@ PrintMatrix(restoredCOO);
 Console.WriteLine($"\nМатрица восстановлена верно: {MatricesEqual(matrixCOO, restoredCOO)}");
 
 // ============================================================
-// ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ
+// ЗАДАНИЕ 2: LIL
 // ============================================================
+
+PrintSeparator("ЗАДАНИЕ 2: LIL - ХРАНЕНИЕ В ФОРМЕ СВЯЗНЫХ СПИСКОВ");
+
+int rLIL = matrixLIL.GetLength(0);
+int cLIL = matrixLIL.GetLength(1);
+int nLIL = CountNonZero(matrixLIL);
+
+Console.WriteLine("Исходная плотная матрица (Рисунок 2, 4x6):");
+PrintMatrix(matrixLIL);
+
+Console.WriteLine("\n--- Анализ эффективности LIL ---");
+Console.WriteLine($"Размерность матрицы: {rLIL} x {cLIL} = {rLIL * cLIL} ячеек (плотное хранение)");
+Console.WriteLine($"Ненулевых элементов (N): {nLIL}");
+Console.WriteLine($"LIL хранение (N*2): {nLIL}*2 = {nLIL * 2} ячеек");
+Console.WriteLine($"Порог эффективности R*C/2: {rLIL}*{cLIL}/2 = {(double)(rLIL * cLIL) / 2:F2}");
+Console.WriteLine($"Условие (N*2 < R*C): {nLIL * 2} < {rLIL * cLIL} => isLILEffective = {isLILEffective(matrixLIL)}");
+
+Console.WriteLine("\n--- Преобразование Dense -> LIL ---");
+DenseToLIL(matrixLIL, out int[][] rowsLIL, out int[][] dataLIL);
+
+Console.WriteLine("Rows[i] — индексы столбцов ненулевых элементов строки i:");
+PrintJaggedArray("Rows", rowsLIL);
+
+Console.WriteLine("Data[i] — значения ненулевых элементов строки i:");
+PrintJaggedArray("Data", dataLIL);
+
+Console.WriteLine("\n--- Преобразование LIL -> Dense ---");
+int[,] restoredLIL = LILToDense(rowsLIL, dataLIL, rLIL, cLIL);
+PrintMatrix(restoredLIL);
+
+Console.WriteLine($"\nМатрица восстановлена верно: {MatricesEqual(matrixLIL, restoredLIL)}");
+
+
+// ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ
 
 static void PrintSeparator(string title)
 {
@@ -77,6 +114,17 @@ static void PrintArray(string name, int[] arr)
     for (int i = 0; i < arr.Length; i++)
         Console.Write($"{arr[i],3}{(i < arr.Length - 1 ? "," : " ")}");
     Console.WriteLine("]");
+}
+
+static void PrintJaggedArray(string name, int[][] arr)
+{
+    for (int i = 0; i < arr.Length; i++)
+    {
+        Console.Write($" {name}[{i}]: [ ");
+        for (int j = 0; j < arr[i].Length; j++)
+            Console.Write($"{arr[i][j],3}{(j < arr[i].Length - 1 ? "," : " ")}");
+        Console.WriteLine("]");
+    }
 }
 
 static int CountNonZero(int[,] m)
@@ -148,4 +196,59 @@ static bool isCOOEffective(int[,] dense)
     int n = CountNonZero(dense);
 
     return n * 3 < r * c;
+}
+
+// ============================================================
+// СТАТИЧЕСКИЕ ФУНКЦИИ — LIL
+// ============================================================
+
+static void DenseToLIL(int[,] dense, out int[][] rows, out int[][] data)
+{
+    int numRows = dense.GetLength(0);
+    int numCols = dense.GetLength(1);
+
+    rows = new int[numRows][];
+    data = new int[numRows][];
+
+    for (int i = 0; i < numRows; i++)
+    {
+        int count = 0;
+
+        for (int j = 0; j < numCols; j++)
+            if (dense[i, j] != 0)
+                count++;
+
+        rows[i] = new int[count];
+        data[i] = new int[count];
+
+        int idx = 0;
+
+        for (int j = 0; j < numCols; j++)
+            if (dense[i, j] != 0)
+            {
+                rows[i][idx] = j;
+                data[i][idx] = dense[i, j];
+                idx++;
+            }
+    }
+}
+
+static int[,] LILToDense(int[][] rows, int[][] data, int numRows, int numCols)
+{
+    int[,] dense = new int[numRows, numCols];
+
+    for (int i = 0; i < rows.Length; i++)
+        for (int k = 0; k < rows[i].Length; k++)
+            dense[i, rows[i][k]] = data[i][k];
+
+    return dense;
+}
+
+static bool isLILEffective(int[,] dense)
+{
+    int r = dense.GetLength(0);
+    int c = dense.GetLength(1);
+    int n = CountNonZero(dense);
+
+    return n * 2 < r * c;
 }
