@@ -48,7 +48,7 @@
 ---
 
 ## 📁 Структура проекта
-```
+``` bash
 ASOIU_sem2/
 ├── Seminar2/
 │   └── Program.cs
