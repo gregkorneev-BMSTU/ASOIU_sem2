@@ -58,6 +58,7 @@ ASOIU_sem2/
 │   ├── CooFormat.cs
 │   ├── LilFormat.cs
 │   ├── CsrFormat.cs
+
 ```
 
 ---
@@ -66,15 +67,15 @@ ASOIU_sem2/
 
 Запуск:
 
-```cd Seminar2
-dotnet run```
+cd Seminar2
+dotnet run
 ---
 
 ## 🔹 Версия 2 — Seminar2_ver2
 
 Запуск:
-```cd Seminar2_ver2
-dotnet run```
+cd Seminar2_ver2
+dotnet run
 ---
 
 ## 📊 Что делает программа
